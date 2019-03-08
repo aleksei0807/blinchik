@@ -12,11 +12,15 @@ export default class Blinchik {
 
   #isNode = isNode()
 
+  #emitter = {}
+
+  #stream = {}
+
   constructor(settings) {
     this.#createSettings(settings)
     this.#createStream()
 
-    return this.stream
+    return this.#stream
   }
 
   #createSettings = (settings) => {
@@ -36,29 +40,26 @@ export default class Blinchik {
 
   #createStream = () => {
     if (this.#isNode) {
-      class MyEmitter extends EventEmitter { }
-      this.emitter = new MyEmitter()
+      this.#emitter = new EventEmitter()
 
-      this.stream = Kefir.fromEvents(this.emitter, 'blinchikEvent')
+      this.#stream = Kefir.fromEvents(this.#emitter, 'blinchikEvent')
     } else {
-      this.emitter = {}
-
       const emitPromise = new Promise(resolve => {
-        this.stream = Kefir.stream(emitter => {
-          this.emitter = emitter
+        this.#stream = Kefir.stream(emitter => {
+          this.#emitter = emitter
           resolve()
         })
       })
 
       this.saveEmit = (params) => {
         emitPromise.then(() => {
-          this.emitter.emit(params)
+          this.#emitter.emit(params)
         })
       }
     }
   }
 
   #emitEvent = (params) => (
-    this.#isNode ? this.emitter.emit('blinchikEvent', params) : this.saveEmit(params)
+    this.#isNode ? this.#emitter.emit('blinchikEvent', params) : this.saveEmit(params)
   )
 }
