@@ -1,0 +1,58 @@
+{
+  "name": "blinchik",
+  "version": "0.0.1",
+  "description": "WebSocket with Kefir",
+  "main": "lib/index.js",
+  "directories": {
+    "example": "examples",
+    "lib": "lib"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prepublish": "babel src --out-dir lib"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aleksei0807/blinchik.git"
+  },
+  "keywords": [
+    "ws",
+    "websocket",
+    "kefir",
+    "sream"
+  ],
+  "author": "Aleksei Shchurak",
+  "license": "Apache 2.0",
+  "bugs": {
+    "url": "https://github.com/aleksei0807/blinchik/issues"
+  },
+  "homepage": "https://github.com/aleksei0807/blinchik#readme",
+  "dependencies": {
+    "events": "^3.0.0",
+    "kefir": "^3.8.6"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.2.3",
+    "@babel/core": "^7.3.4",
+    "@babel/node": "^7.2.2",
+    "@babel/plugin-proposal-class-properties": "^7.3.4",
+    "@babel/plugin-proposal-decorators": "^7.3.0",
+    "@babel/plugin-proposal-object-rest-spread": "^7.3.4",
+    "@babel/plugin-syntax-dynamic-import": "^7.2.0",
+    "@babel/plugin-transform-destructuring": "^7.3.2",
+    "@babel/plugin-transform-runtime": "^7.3.4",
+    "@babel/polyfill": "^7.2.5",
+    "@babel/preset-env": "^7.3.4",
+    "@babel/register": "^7.0.0",
+    "@babel/runtime": "^7.3.4",
+    "app-module-path": "^2.2.0",
+    "babel-eslint": "^10.0.1",
+    "eslint": "^5.15.1",
+    "eslint-config-airbnb": "^17.1.0",
+    "eslint-plugin-babel": "^5.3.0",
+    "eslint-plugin-import": "^2.16.0",
+    "eslint-plugin-jsx-a11y": "^6.2.1",
+    "eslint-plugin-react": "^7.12.4",
+    "eslint-plugin-security": "^1.4.0"
+  }
+}
