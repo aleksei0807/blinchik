@@ -19,8 +19,6 @@ export default class Blinchik {
   constructor(settings) {
     this.#createSettings(settings)
     this.#createStream()
-
-    return this.#stream
   }
 
   #createSettings = (settings) => {
@@ -62,4 +60,10 @@ export default class Blinchik {
   #emitEvent = (params) => (
     this.#isNode ? this.#emitter.emit('blinchikEvent', params) : this.saveEmit(params)
   )
+
+  onMessage = () => this.#stream
+
+  sendMessage = () => {
+    // send message
+  }
 }
