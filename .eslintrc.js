@@ -106,6 +106,7 @@ module.exports = {
     'no-mixed-operators': 0,
     'no-trailing-spaces': [2, { skipBlankLines: true }],
     'no-plusplus': 0,
+    'security/detect-object-injection': 0,
 
     'generator-star-spacing': 1,
 

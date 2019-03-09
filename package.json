@@ -29,7 +29,8 @@
   "homepage": "https://github.com/aleksei0807/blinchik#readme",
   "dependencies": {
     "events": "^3.0.0",
-    "kefir": "^3.8.6"
+    "kefir": "^3.8.6",
+    "ws": "^6.2.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.2.3",
