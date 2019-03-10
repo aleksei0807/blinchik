@@ -12,22 +12,15 @@ const defaultSettings = {
 
 export default class Blinchik {
   #isNode = isNode()
-
   #emitter = {}
-
   #stream = {}
-
-  #ws = {}
-
   #settings
-
   #wsPath
-
   #callbacks = {}
-
   #isReconnect = false
-
   #isClosed = true
+
+  ws = {}
 
   constructor(ws, settings) {
     this.#settings = settings || defaultSettings
@@ -65,24 +58,25 @@ export default class Blinchik {
     if (typeof ws === 'string') {
       this.#wsPath = ws
       if (this.#isNode) {
-        this.#ws = new NodeWS(ws)
+        this.ws = new NodeWS(ws)
       } else {
-        this.#ws = new WebSocket(ws)
+        this.ws = new WebSocket(ws)
       }
     } else if (this.#isNode && typeof ws === 'object' && ws.constructor.name === 'Object') {
-      this.#ws = new NodeWS.Server(ws)
+      this.ws = new NodeWS.Server(ws)
     } else {
-      this.#ws = ws
+      this.ws = ws
     }
 
-    if (typeof this.#ws.on === 'function') {
-      if (this.#ws.constructor.name === 'WebSocketServer') {
+    if (typeof this.ws.on === 'function') {
+      if (this.ws.constructor.name === 'WebSocketServer') {
         this.#isClosed = false
 
-        this.#ws.on('connection', (connection) => {
+        this.ws.on('connection', (connection, req) => {
           this.#emitEvent({
             type: 'connection',
             connection,
+            req,
           })
 
           connection.on('message', (message) => {
@@ -96,22 +90,22 @@ export default class Blinchik {
           })
         })
       } else {
-        this.#ws.on('message', (data) => {
+        this.ws.on('message', (data) => {
           this.#emitEvent({
             type: 'message',
             data,
           })
         })
 
-        this.#ws.on('open', () => {
+        this.ws.on('open', () => {
           this.#isClosed = false
         })
 
-        this.#ws.on('error', (e) => {
+        this.ws.on('error', (e) => {
           this.#browserReconnect(e.code, true)
         })
 
-        this.#ws.on('close', this.#browserReconnect)
+        this.ws.on('close', this.#browserReconnect)
 
         if (this.#isReconnect) {
           Object.keys(this.#callbacks).forEach((key) => {
@@ -120,18 +114,18 @@ export default class Blinchik {
         }
       }
     } else {
-      this.#ws.onmessage = (data) => {
+      this.ws.onmessage = (data) => {
         this.#emitEvent({
           type: 'message',
           data,
         })
       }
 
-      this.#ws.onopen = () => {
+      this.ws.onopen = () => {
         this.#isClosed = false
       }
 
-      this.#ws.onclose = (e) => {
+      this.ws.onclose = (e) => {
         this.#browserReconnect(e.code)
       }
 
@@ -149,8 +143,8 @@ export default class Blinchik {
       this.#isClosed = true
       this.#isReconnect = true
 
-      if (typeof this.#ws.removeAllListeners === 'function') {
-        this.#ws.removeAllListeners()
+      if (typeof this.ws.removeAllListeners === 'function') {
+        this.ws.removeAllListeners()
       }
 
       setTimeout(() => {
@@ -164,20 +158,14 @@ export default class Blinchik {
   )
 
   onOpen = (cb) => {
-    if (typeof this.#ws.on === 'function') {
-      this.#ws.on('open', (...args) => {
+    if (typeof this.ws.on === 'function') {
+      this.ws.on('open', (...args) => {
         this.#isClosed = false
 
-        if (this.#isReconnect) {
-          setTimeout(() => {
-            cb(...args)
-          }, 100)
-        } else {
-          cb(...args)
-        }
+        cb(...args)
       })
     } else {
-      this.#ws.onopen = (...args) => {
+      this.ws.onopen = (...args) => {
         this.#isClosed = false
         cb(...args)
       }
@@ -189,13 +177,13 @@ export default class Blinchik {
   }
 
   onError = (cb) => {
-    if (typeof this.#ws.on === 'function') {
-      this.#ws.on('error', (e) => {
+    if (typeof this.ws.on === 'function') {
+      this.ws.on('error', (e) => {
         this.#browserReconnect(e.code, true)
         cb(e)
       })
     } else {
-      this.#ws.onerror = () => cb
+      this.ws.onerror = () => cb
     }
 
     if (!this.#settings.disableReconnect && this.#wsPath) {
@@ -204,8 +192,8 @@ export default class Blinchik {
   }
 
   onPing = (cb) => {
-    if (typeof this.#ws.on === 'function') {
-      this.#ws.on('ping', cb)
+    if (typeof this.ws.on === 'function') {
+      this.ws.on('ping', cb)
     }
 
     if (!this.#settings.disableReconnect && this.#wsPath) {
@@ -214,13 +202,13 @@ export default class Blinchik {
   }
 
   onClose = (cb) => {
-    if (typeof this.#ws.on === 'function') {
-      this.#ws.on('close', (e) => {
+    if (typeof this.ws.on === 'function') {
+      this.ws.on('close', (e) => {
         this.#browserReconnect(e)
         cb(e)
       })
     } else {
-      this.#ws.onclose = (e) => {
+      this.ws.onclose = (e) => {
         this.#browserReconnect(e.code)
         cb(e)
       }
@@ -240,15 +228,15 @@ export default class Blinchik {
   onConnection = () => (
     this.#stream
       .filter(({ type }) => type === 'connection')
-      .map(({ connection }) => connection)
+      .map(({ connection, req }) => ({ connection, req }))
   )
 
-  sendMessage = (message, ws) => {
+  send = (message, ws) => {
     if (!this.#isClosed) {
       if (ws) {
         ws.send(message)
       } else {
-        this.#ws.send(message)
+        this.ws.send(message)
       }
     }
   }

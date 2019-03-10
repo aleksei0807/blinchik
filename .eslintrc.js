@@ -107,6 +107,7 @@ module.exports = {
     'no-trailing-spaces': [2, { skipBlankLines: true }],
     'no-plusplus': 0,
     'security/detect-object-injection': 0,
+    'lines-between-class-members': 0,
 
     'generator-star-spacing': 1,
 
