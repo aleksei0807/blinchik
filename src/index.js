@@ -72,19 +72,19 @@ export default class Blinchik {
       if (this.ws.constructor.name === 'WebSocketServer') {
         this.#isClosed = false
 
-        this.ws.on('connection', (connection, req) => {
+        this.ws.on('connection', (conn, req) => {
           this.#emitEvent({
-            type: 'connection',
-            connection,
+            type: 'conn',
+            conn,
             req,
           })
 
-          connection.on('message', (message) => {
+          conn.on('message', (msg) => {
             this.#emitEvent({
-              type: 'message',
+              type: 'msg',
               data: {
-                message,
-                connection,
+                msg,
+                conn,
               }
             })
           })
@@ -92,7 +92,7 @@ export default class Blinchik {
       } else {
         this.ws.on('message', (data) => {
           this.#emitEvent({
-            type: 'message',
+            type: 'msg',
             data,
           })
         })
@@ -116,7 +116,7 @@ export default class Blinchik {
     } else {
       this.ws.onmessage = (data) => {
         this.#emitEvent({
-          type: 'message',
+          type: 'msg',
           data,
         })
       }
@@ -221,22 +221,25 @@ export default class Blinchik {
 
   onMessage = () => (
     this.#stream
-      .filter(({ type }) => type === 'message')
+      .filter(({ type }) => type === 'msg')
       .map(({ data }) => data)
   )
 
   onConnection = () => (
     this.#stream
-      .filter(({ type }) => type === 'connection')
-      .map(({ connection, req }) => ({ connection, req }))
+      .filter(({ type }) => type === 'conn')
+      .map(({ conn, req }) => ({ conn, req }))
   )
 
-  send = (message, ws) => {
+  onMsg = this.onMessage
+  onConn = this.onConnection
+
+  send = (msg, ws) => {
     if (!this.#isClosed) {
       if (ws) {
-        ws.send(message)
+        ws.send(msg)
       } else {
-        this.ws.send(message)
+        this.ws.send(msg)
       }
     }
   }
