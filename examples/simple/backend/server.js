@@ -14,7 +14,7 @@ connectionsStream
   })
 
 messagesStream
-  .onValue(({ msg, conn }) => {
-    console.log(`count from client ${conn.connId}:`, msg)
-    b.send(`${+msg + 1}`, conn)
+  .onValue(({ data, conn }) => {
+    console.log(`count from client ${conn.connId}:`, data)
+    b.send(`${+data + 1}`, conn)
   })

@@ -16,6 +16,8 @@ const config = {
     ],
   ],
   plugins: [
+    '@babel/plugin-proposal-optional-chaining',
+    '@babel/plugin-proposal-export-default-from',
     [ '@babel/plugin-proposal-decorators', { legacy: true } ],
     '@babel/plugin-transform-runtime',
     '@babel/plugin-syntax-dynamic-import',

@@ -1,15 +1,16 @@
-const isNodeMethod = () => {
-  let isNode = false
-  if (typeof process === 'object') {
-    if (typeof process.versions === 'object') {
-      if (typeof process.versions.node !== 'undefined') {
-        isNode = true
-      }
-    }
-  }
+// Copyright 2019-present Aleksei Shchurak
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+// http://www.apache.org/licenses/LICENSE-2.0
+//
 
-  return isNode
-}
+
+const isNodeMethod = () => (
+  typeof process?.versions?.node !== 'undefined'
+)
 
 
 export default isNodeMethod

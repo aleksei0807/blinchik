@@ -1,5 +1,5 @@
 {
-  "name": "simple-example",
+  "name": "sessions-example",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -11,5 +11,8 @@
   "devDependencies": {
     "webpack": "^4.29.6",
     "webpack-cli": "^3.2.3"
+  },
+  "dependencies": {
+    "uuid": "^3.3.2"
   }
 }

@@ -1,8 +1,21 @@
+// Copyright 2019-present Aleksei Shchurak
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+// http://www.apache.org/licenses/LICENSE-2.0
+//
+
+
 import Kefir from 'kefir'
 import EventEmitter from 'events'
 import NodeWS from 'ws'
 
 import isNode from './helpers/isNode'
+
+
+export setCookie from './helpers/setCookie'
 
 
 const defaultSettings = {
@@ -42,7 +55,7 @@ export default class Blinchik {
         })
       })
 
-      this.saveEmit = (params) => {
+      this.safeEmit = (params) => {
         emitPromise.then(() => {
           this.#emitter.emit(params)
         })
@@ -72,6 +85,14 @@ export default class Blinchik {
       if (this.ws.constructor.name === 'WebSocketServer') {
         this.#isClosed = false
 
+        this.ws.on('headers', (headers, req) => {
+          this.#emitEvent({
+            type: 'headers',
+            headers,
+            req,
+          })
+        })
+
         this.ws.on('connection', (conn, req) => {
           this.#emitEvent({
             type: 'conn',
@@ -83,17 +104,20 @@ export default class Blinchik {
             this.#emitEvent({
               type: 'msg',
               data: {
-                msg,
+                data: msg,
                 conn,
+                req,
               }
             })
           })
         })
       } else {
-        this.ws.on('message', (data) => {
+        this.ws.on('message', (msg) => {
           this.#emitEvent({
             type: 'msg',
-            data,
+            data: {
+              data: msg,
+            },
           })
         })
 
@@ -138,7 +162,7 @@ export default class Blinchik {
   }
 
   #browserReconnect = (code, isError) => {
-    const cond = isError ? code === 'ECONNREFUSED' : code !== 1000
+    const cond = isError ? code === 'ECONNREFUSED' : code !== 1000 && code !== 1015
     if (!this.#settings.disableReconnect && this.#wsPath && cond) {
       this.#isClosed = true
       this.#isReconnect = true
@@ -154,7 +178,7 @@ export default class Blinchik {
   }
 
   #emitEvent = (params) => (
-    this.#isNode ? this.#emitter.emit('blinchikEvent', params) : this.saveEmit(params)
+    this.#isNode ? this.#emitter.emit('blinchikEvent', params) : this.safeEmit(params)
   )
 
   onOpen = (cb) => {
@@ -231,16 +255,19 @@ export default class Blinchik {
       .map(({ conn, req }) => ({ conn, req }))
   )
 
+  onHeaders = () => (
+    this.#stream
+      .filter(({ type }) => type === 'headers')
+      .map(({ headers, req }) => ({ headers, req }))
+  )
+
   onMsg = this.onMessage
   onConn = this.onConnection
 
   send = (msg, ws) => {
-    if (!this.#isClosed) {
-      if (ws) {
-        ws.send(msg)
-      } else {
-        this.ws.send(msg)
-      }
+    const conn = ws || this.ws
+    if ((!this.#isClosed || ws) && conn.readyState === 1) {
+      conn.send(msg)
     }
   }
 }
