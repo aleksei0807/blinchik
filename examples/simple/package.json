@@ -4,12 +4,30 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "server": "babel-node --config-file ../../babel.config.js ./backend/server.js",
+    "node-client": "babel-node --config-file ../../babel.config.js ./backend/client.js",
+    "browser-client:build": "webpack"
   },
   "author": "",
   "license": "SEE LICENSE IN /LICENSE",
   "devDependencies": {
     "webpack": "^4.29.6",
-    "webpack-cli": "^3.2.3"
+    "webpack-cli": "^3.2.3",
+    "@babel/cli": "^7.2.3",
+    "@babel/core": "^7.3.4",
+    "@babel/node": "^7.2.2",
+    "@babel/plugin-proposal-class-properties": "^7.3.4",
+    "@babel/plugin-proposal-decorators": "^7.3.0",
+    "@babel/plugin-proposal-export-default-from": "^7.2.0",
+    "@babel/plugin-proposal-object-rest-spread": "^7.3.4",
+    "@babel/plugin-proposal-optional-chaining": "^7.2.0",
+    "@babel/plugin-syntax-dynamic-import": "^7.2.0",
+    "@babel/plugin-transform-destructuring": "^7.3.2",
+    "@babel/plugin-transform-runtime": "^7.3.4",
+    "@babel/polyfill": "^7.2.5",
+    "@babel/preset-env": "^7.3.4",
+    "@babel/register": "^7.0.0",
+    "@babel/runtime": "^7.3.4"
   }
 }
