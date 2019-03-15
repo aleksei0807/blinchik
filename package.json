@@ -22,7 +22,10 @@
     "kefir",
     "sream"
   ],
-  "author": "Aleksei Shchurak",
+  "authors": [
+    "Aleksei Shchurak",
+    "Kirill Danshin"
+  ],
   "license": "Apache 2.0",
   "bugs": {
     "url": "https://github.com/aleksei0807/blinchik/issues"
