@@ -1,6 +1,6 @@
 # Blinchik
 
-A tiny websocket wrapper that made using [Kefir](https://kefirjs.github.io/kefir/).
+A tiny websocket wrapper that made using [Kefir.js](https://kefirjs.github.io/kefir/).
 It returns a Kefir stream instance.
 
 ### Etymology
