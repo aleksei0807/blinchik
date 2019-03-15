@@ -13,6 +13,7 @@ import EventEmitter from 'events'
 import NodeWS from 'ws'
 
 import isNode from './helpers/isNode'
+import isArrayLike from './helpers/isArrayLike'
 
 
 export setCookie from './helpers/setCookie'
@@ -243,10 +244,19 @@ export default class Blinchik {
     }
   }
 
-  onMessage = () => (
+  onMessage = ({ shouldParseJSON }) => (
     this.#stream
       .filter(({ type }) => type === 'msg')
-      .map(({ data }) => data)
+      .map(({ data }) => {
+        if (shouldParseJSON && typeof data.data === 'string') {
+          data = {
+            ...data,
+            data: JSON.parse(data.data),
+          }
+        }
+
+        return data
+      })
   )
 
   onConnection = () => (
@@ -267,6 +277,15 @@ export default class Blinchik {
   send = (msg, ws) => {
     const conn = ws || this.ws
     if ((!this.#isClosed || ws) && conn.readyState === 1) {
+      if (!(typeof msg === 'string'
+        || msg instanceof Buffer
+        || msg instanceof ArrayBuffer
+        || msg instanceof Array
+        || isArrayLike(msg)
+      )) {
+        msg = JSON.stringify(msg)
+      }
+
       conn.send(msg)
     }
   }
