@@ -3,6 +3,8 @@
 A tiny websocket wrapper that made using [Kefir.js](https://kefirjs.github.io/kefir/).
 It returns a Kefir stream instance.
 
+[![NPM](https://nodei.co/npm/blinchik.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/blinchik/)
+
 ### Etymology
 
 Blinchik — diminutive form of [Blin](https://en.wikipedia.org/wiki/Blini).
