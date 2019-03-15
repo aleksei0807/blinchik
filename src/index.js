@@ -244,7 +244,7 @@ export default class Blinchik {
     }
   }
 
-  onMessage = ({ shouldParseJSON }) => (
+  onMessage = ({ shouldParseJSON } = {}) => (
     this.#stream
       .filter(({ type }) => type === 'msg')
       .map(({ data }) => {
