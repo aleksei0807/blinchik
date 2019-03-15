@@ -36,8 +36,8 @@ export default class Blinchik {
 
   ws = {}
 
-  constructor(ws, settings) {
-    this.#settings = settings || defaultSettings
+  constructor(ws, settings = defaultSettings) {
+    this.#settings = settings
 
     this.#createConnection(ws)
     this.#createStream()
