@@ -11,16 +11,11 @@ const setHeadersStream = b.onHeaders()
 
 const counters = {}
 
-const getExpiresDate = () => {
-  const expiryDate = new Date(Date.now() + 12 * 60 * 60 * 1000) // 12 hours from now
-  return expiryDate.toUTCString()
-}
-
 setHeadersStream
   .map(setCookie({
     name: 'sessid',
     getValue: createUUID,
-    getExpires: getExpiresDate,
+    ttl: 12 * 60 * 60, // 12 hours from now in seconds
   }))
   .onValue(({ req, cookie }) => {
     const { value } = cookie

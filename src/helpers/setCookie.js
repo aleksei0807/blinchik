@@ -13,15 +13,21 @@ import cookieParser from 'cookie'
 
 const set = (cookie, cookies, headers) => {
   let { value, expires } = cookie
-  const { name, isReplace, getValue, getExpires } = cookie
+  const { name, isReplace, getValue, getExpires, ttl } = cookie
 
   if (isReplace || !cookies[name]) {
     if (typeof getValue === 'function') {
       value = getValue()
     }
 
-    if (typeof getExpires === 'function') {
+    if (ttl) {
+      expires = new Date(Date.now() + ttl * 1000)
+    } else if (typeof getExpires === 'function') {
       expires = getValue()
+    }
+
+    if (expires instanceof Date) {
+      expires = expires.toUTCString()
     }
 
     headers.push(`Set-Cookie: sessid=${value}; Expires=${expires}`)
