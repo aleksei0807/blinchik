@@ -208,7 +208,7 @@ export default class Blinchik {
         cb(e)
       })
     } else {
-      this.ws.onerror = () => cb
+      this.ws.onerror = cb
     }
 
     if (!this.#settings.disableReconnect && this.#wsPath) {
