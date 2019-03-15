@@ -1,4 +1,4 @@
-import Blinchik from '../../../lib'
+import Blinchik from 'blinchik'
 
 
 const b = new Blinchik({ port: 8080 })

@@ -1,6 +1,6 @@
 import createUUID from 'uuid/v4'
 
-import Blinchik, { setCookie } from '../../../lib'
+import Blinchik, { setCookie } from 'blinchik'
 
 
 const b = new Blinchik({ port: 8080 })

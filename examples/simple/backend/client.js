@@ -1,4 +1,4 @@
-import Blinchik from '../../../lib'
+import Blinchik from 'blinchik'
 
 
 const b = new Blinchik('ws://127.0.0.1:8080')

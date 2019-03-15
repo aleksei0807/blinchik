@@ -31,6 +31,7 @@
     "@babel/runtime": "^7.3.4"
   },
   "dependencies": {
+    "blinchik": "^1.0.0",
     "uuid": "^3.3.2"
   }
 }

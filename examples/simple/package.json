@@ -29,5 +29,8 @@
     "@babel/preset-env": "^7.3.4",
     "@babel/register": "^7.0.0",
     "@babel/runtime": "^7.3.4"
+  },
+  "dependencies": {
+    "blinchik": "^1.0.0"
   }
 }
