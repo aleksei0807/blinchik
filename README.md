@@ -94,6 +94,8 @@ Using Blinchik, you can use all Kefir stream methods. See [Kefir docs](https://k
 
 `ws` must be one of:
 
+- undefined (for creating mock instance)
+- Blinchik instance (for using mock instance)
 - String (node & browser client only): `wss://ws.example.com/connections`.
 - Object (server only): [`WebSocket.Server` options](http://npmjs.com/ws) from `ws` library
 - WebSocket or WebSocket.Server from ws library
@@ -137,3 +139,6 @@ Blinchik instance will use this connection.
 - `onHeaders()`: returns Kefir stream which allows set custom headers.
   This is done by mutating `headers` property of the value.
 
+### Blinchik mock methods
+
+- `connect()`: create mock connection
