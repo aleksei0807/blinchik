@@ -22,6 +22,7 @@ npm i -S blinchik
 
 - [Simple counter example](examples/simple).
 - [Sessions usage example](examples/sessions).
+- [Mock example](examples/mock).
 
 You can also scale your code using Blinchik.
 
