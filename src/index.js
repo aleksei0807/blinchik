@@ -33,6 +33,8 @@ export default class Blinchik {
   #callbacks = {}
   #isReconnect = false
   #isClosed = true
+  #isMock = false
+  #mockCallbacks = {}
 
   ws = {}
 
@@ -64,9 +66,55 @@ export default class Blinchik {
     }
   }
 
+  #createMock = (ws, isInner) => {
+    const originalConnect = isInner ? () => {} : ws.connect
+
+    let defaultReq
+    if (this.#isNode) {
+      const MockReq = require('readable-mock-req')
+      defaultReq = new MockReq()
+    }
+
+    ws.connect = (conn = ws, req = defaultReq, headers = []) => {
+      const originalSend = ws.send
+      ws.send = (...args) => {
+        if (!args[1] || args[1] === conn) {
+          this.#emitEvent({
+            type: 'msg',
+            data: {
+              data: args[0],
+              conn: args[1] || conn,
+              req: args[2] || req,
+            }
+          })
+        }
+        originalSend(...args)
+      }
+
+      this.#emitEvent({
+        type: 'headers',
+        headers,
+        req,
+      })
+
+      this.#emitEvent({
+        type: 'conn',
+        conn,
+        req,
+      })
+
+      originalConnect(this, conn, req, headers)
+
+      if (typeof this.#mockCallbacks.onOpen === 'function') {
+        this.#mockCallbacks.onOpen(conn)
+      }
+    }
+  }
+
   #createConnection = (ws) => {
     if (!ws) {
-      throw new Error('ws is not defined!')
+      this.#isMock = true
+      return
     }
 
     if (typeof ws === 'string') {
@@ -160,6 +208,23 @@ export default class Blinchik {
         })
       }
     }
+
+    // mock
+    if (ws instanceof Blinchik) {
+      this.#createMock(ws)
+    }
+
+    if (this.#settings.mock instanceof Blinchik) {
+      this.#createMock(this.#settings.mock)
+    }
+
+    if (this.#settings.mock instanceof Array) {
+      this.#settings.mock.forEach((mock) => {
+        if (mock instanceof Blinchik) {
+          this.#createMock(mock)
+        }
+      })
+    }
   }
 
   #browserReconnect = (code, isError) => {
@@ -198,6 +263,10 @@ export default class Blinchik {
 
     if (!this.#settings.disableReconnect && this.#wsPath) {
       this.#callbacks.onOpen = cb
+    }
+
+    if (this.#isMock || this.ws instanceof Blinchik || this.#settings.mock) {
+      this.#mockCallbacks.onOpen = cb
     }
   }
 
@@ -287,6 +356,16 @@ export default class Blinchik {
       }
 
       conn.send(msg)
+    }
+  }
+
+  // for mock
+  connect = (ws, conn = {}, req = {}, headers = []) => {
+    if (ws instanceof Blinchik) {
+      this.#createMock(ws, true)
+      ws.connect(conn, req, headers)
+    } else {
+      console.error('Mock instance must be provided to other Blinchik instance!')
     }
   }
 }
