@@ -107,6 +107,7 @@ Using Blinchik, you can use all Kefir stream methods. See [Kefir docs](https://k
 - `disableReconnect` (node & browser client only, Boolean, default: false): disables automatic failover behaviour,
   which will try to reconnect to a broken connection each `reconnectInterval` ms.
 - `reconnectInterval` (node & browser client only, Number, default: 2000): failover reconnection interval in milliseconds.
+- `mock` mock Blinchik instance or array mock Blinchik instances
 
 ### Blinchik instance properties
 
