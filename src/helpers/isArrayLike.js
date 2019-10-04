@@ -1,6 +1,7 @@
+/* @flow */
 // borrowed and refactored version of https://stackoverflow.com/a/24048615
 
-const isArrayLike = (item) => (
+const isArrayLike = (item: any): boolean => (
   Array.isArray(item)
   || (!!item
     && typeof item === 'object'

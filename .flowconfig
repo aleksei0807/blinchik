@@ -1,0 +1,16 @@
+[ignore]
+
+[include]
+
+[libs]
+
+[lints]
+
+[options]
+esproposal.class_static_fields=enable
+esproposal.class_instance_fields=enable
+esproposal.decorators=ignore
+esproposal.optional_chaining=enable
+esproposal.export_star_as=enable
+suppress_comment= \\(.\\|\n\\)*\\$FlowIgnore
+[strict]
