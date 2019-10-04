@@ -147,7 +147,7 @@ Blinchik instance will use this connection.
 
 ### helpers
 
-- setCookie(cookie)(params)
+- `setCookie(cookie)(params)`: helper for onHeaders stream.
 
 `cookie` is object with:
 
