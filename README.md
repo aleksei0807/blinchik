@@ -144,3 +144,22 @@ Blinchik instance will use this connection.
 ### Blinchik mock methods
 
 - `connect()`: create mock connection
+
+### helpers
+
+- setCookie(cookie)(params)
+
+`cookie` is object with:
+
+  - value?: string;
+  - expires?: string | Date;
+  - name?: string;
+  - isReplace?: boolean;
+  - ttl?: number;
+  - getValue?: () => string;
+  - getExpires?: () => string | Date;
+
+`params` is object with:
+
+  - req: Request Object;
+  - headers: Array<string>;
