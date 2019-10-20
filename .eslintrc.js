@@ -109,6 +109,7 @@ module.exports = {
     'security/detect-object-injection': 0,
     'lines-between-class-members': 0,
     'no-param-reassign': 0,
+    'import/no-cycle': 0,
 
     'generator-star-spacing': 1,
 

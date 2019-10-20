@@ -1,9 +1,10 @@
 import createUUID from 'uuid/v4'
 
-import Blinchik, { setCookie } from 'blinchik'
+import { NodeServer } from '../../../lib'
+import { setCookie } from '../../../lib/helpers'
 
 
-const b = new Blinchik({ port: 8080 })
+const b = new NodeServer({ port: 8080 })
 
 const messagesStream = b.onMsg()
 const connectionStream = b.onConn()

@@ -7,12 +7,7 @@
 //
 // http://www.apache.org/licenses/LICENSE-2.0
 //
-import NodeServer from './node/server'
-import NodeClient from './node/client'
-import BrowserClient from './browser/client'
 
-export {
-  NodeServer,
-  NodeClient,
-  BrowserClient,
-}
+import Core from '../core'
+
+export default class MockClient extends Core { }

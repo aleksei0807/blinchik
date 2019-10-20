@@ -1,4 +1,5 @@
 /* @flow */
+/* eslint-disable import/prefer-default-export */
 // Copyright 2019-present Aleksei Shchurak
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -7,12 +8,8 @@
 //
 // http://www.apache.org/licenses/LICENSE-2.0
 //
-import NodeServer from './node/server'
-import NodeClient from './node/client'
-import BrowserClient from './browser/client'
+import setCookie from './setCookie'
 
 export {
-  NodeServer,
-  NodeClient,
-  BrowserClient,
+  setCookie,
 }

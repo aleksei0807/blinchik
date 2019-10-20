@@ -1,7 +1,7 @@
-import Blinchik from 'blinchik'
+import { NodeClient } from '../../../lib'
 
 
-const b = new Blinchik('ws://127.0.0.1:8080')
+const b = new NodeClient('ws://127.0.0.1:8080')
 
 const messagesStream = b.onMsg()
 
